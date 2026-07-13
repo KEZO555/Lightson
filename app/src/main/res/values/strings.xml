@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Lightson</string>
+
+    <string name="permission_title">Permission required</string>
+    <string name="permission_body">Lightson needs WRITE_SECURE_SETTINGS to control the colour filter. Connect your phone to a computer with adb and run:</string>
+    <string name="permission_command">adb shell pm grant app.lightson android.permission.WRITE_SECURE_SETTINGS</string>
+
+    <string name="filter_switch_title">Grayscale filter</string>
+    <string name="filter_switch_subtitle">Show the whole screen in black and white</string>
+
+    <string name="color_apps_title">Colour apps</string>
+    <string name="color_apps_subtitle">Apps that always open in full colour</string>
+
+    <string name="accessibility_row_title">Auto colour switching</string>
+    <string name="service_on">Service enabled — tap to open accessibility settings</string>
+    <string name="service_off">Service disabled — tap to enable it in accessibility settings</string>
+
+    <string name="accessibility_service_label">Lightson colour switching</string>
+    <string name="accessibility_service_description">Detects which app is in the foreground so the grayscale filter can be switched off for your chosen colour apps and restored afterwards. Lightson does not read any screen content.</string>
+
+    <string name="tile_label">Grayscale</string>
+</resources>

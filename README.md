@@ -1,0 +1,59 @@
+# Lightson
+
+A tiny Android app that replicates the **colour filter** feature from
+[Luma](https://github.com/vandamd/luma), the minimal launcher for the Light
+Phone III — but as a standalone app that works with any launcher on any
+Android device (8.0+).
+
+## What it does
+
+- **Grayscale filter** — turns the whole screen black and white using
+  Android's built-in colour-correction (daltonizer), the same mechanism the
+  Light Phone uses. No overlays, no root.
+- **Colour apps** — pick apps that should always run in full colour. When
+  one of them comes to the foreground the grayscale filter switches off
+  automatically, and it switches back on the moment you leave the app.
+- **Quick Settings tile** — flip the grayscale filter manually from the
+  notification shade.
+
+## Setup
+
+1. Install the APK.
+2. Grant the secure-settings permission once via adb (this is the only way
+   Android allows an app to control colour correction; it survives reboots):
+
+   ```
+   adb shell pm grant app.lightson android.permission.WRITE_SECURE_SETTINGS
+   ```
+
+3. Open Lightson and turn on the **Grayscale filter**.
+4. To use automatic colour switching, tap **Auto colour switching** and
+   enable the *Lightson colour switching* accessibility service. The service
+   only listens for foreground-app changes — it cannot and does not read
+   screen content (`canRetrieveWindowContent` is off).
+5. Pick your **Colour apps** (e.g. Camera, Photos, Maps).
+
+## How it works
+
+The grayscale effect is Android's accessibility colour correction set to
+monochromacy, controlled through two `Settings.Secure` keys:
+
+- `accessibility_display_daltonizer_enabled` — filter on/off
+- `accessibility_display_daltonizer` — `0` = grayscale (monochromacy)
+
+Writing those keys requires `WRITE_SECURE_SETTINGS`, which can only be
+granted over adb. An `AccessibilityService` subscribed to
+`TYPE_WINDOW_STATE_CHANGED` events detects which app is in the foreground:
+entering a colour app disables the filter, leaving it restores the filter.
+The "we disabled it" flag is persisted so the filter is restored even if the
+process is killed mid-swap. Events from the system UI and keyboards are
+ignored to avoid the filter flickering during app transitions.
+
+## Building
+
+```
+./gradlew assembleDebug
+```
+
+The APK lands in `app/build/outputs/apk/debug/`. A GitHub Actions workflow
+also builds the APK on every push and attaches it as a build artifact.
