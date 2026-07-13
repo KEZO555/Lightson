@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_tile"
+        android:shortcutId="toggle_filter"
+        android:shortcutLongLabel="@string/shortcut_toggle_long"
+        android:shortcutShortLabel="@string/shortcut_toggle_short">
+        <intent
+            android:action="app.lightson.action.TOGGLE_FILTER"
+            android:targetClass="app.lightson.ToggleFilterActivity"
+            android:targetPackage="app.lightson" />
+    </shortcut>
+</shortcuts>

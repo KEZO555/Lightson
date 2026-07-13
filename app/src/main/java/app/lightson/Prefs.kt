@@ -22,6 +22,11 @@ class Prefs(context: Context) {
         get() = prefs.getBoolean(KEY_WE_DISABLED, false)
         set(value) = prefs.edit().putBoolean(KEY_WE_DISABLED, value).apply()
 
+    /** Hardware key gesture that toggles the filter, one of the KEYMAP_* values. */
+    var keymap: Int
+        get() = prefs.getInt(KEY_KEYMAP, KEYMAP_NONE)
+        set(value) = prefs.edit().putInt(KEY_KEYMAP, value).apply()
+
     fun addColorApp(packageName: String) {
         colorApps = colorApps + packageName
     }
@@ -33,5 +38,12 @@ class Prefs(context: Context) {
     companion object {
         private const val KEY_COLOR_APPS = "color_apps"
         private const val KEY_WE_DISABLED = "we_disabled_filter"
+        private const val KEY_KEYMAP = "keymap"
+
+        const val KEYMAP_NONE = 0
+        const val KEYMAP_VOLUME_CHORD = 1
+        const val KEYMAP_DOUBLE_VOLUME_UP = 2
+        const val KEYMAP_DOUBLE_VOLUME_DOWN = 3
+        const val KEYMAP_CAMERA_LONG_PRESS = 4
     }
 }

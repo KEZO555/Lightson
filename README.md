@@ -15,6 +15,16 @@ Android device (8.0+).
   automatically, and it switches back on the moment you leave the app.
 - **Quick Settings tile** — flip the grayscale filter manually from the
   notification shade.
+- **Keymap** — toggle the filter from hardware keys. Options: long-press the
+  camera button (Light Phone III's side shutter key), volume up + down
+  together, or double-press volume up/down. With the camera-button keymap a
+  short press still opens the camera, and the key is left untouched while a
+  camera app is in the foreground so the shutter keeps working.
+- **Toggle shortcut** — an exported `ToggleFilterActivity`
+  (`app.lightson.action.TOGGLE_FILTER`) plus a launcher long-press shortcut,
+  so key-mapper apps (Key Mapper, Button Mapper), launcher gestures, or
+  `adb shell am start -n app.lightson/.ToggleFilterActivity` can toggle it
+  too.
 
 ## Setup
 
@@ -32,6 +42,9 @@ Android device (8.0+).
    only listens for foreground-app changes — it cannot and does not read
    screen content (`canRetrieveWindowContent` is off).
 5. Pick your **Colour apps** (e.g. Camera, Photos, Maps).
+6. Optionally pick a **Keymap** (e.g. *Long-press camera button*). Key
+   gestures are detected by the same accessibility service, so it must be
+   enabled for the keymap to work.
 
 ## How it works
 

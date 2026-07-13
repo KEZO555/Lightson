@@ -20,4 +20,20 @@
     <string name="accessibility_service_description">Detects which app is in the foreground so the grayscale filter can be switched off for your chosen colour apps and restored afterwards. Lightson does not read any screen content.</string>
 
     <string name="tile_label">Grayscale</string>
+
+    <string name="keymap_row_title">Keymap</string>
+    <string name="keymap_dialog_title">Toggle filter with</string>
+    <string name="keymap_none">None</string>
+    <string name="keymap_camera_long_press">Long-press camera button</string>
+    <string name="keymap_volume_chord">Volume up + down together</string>
+    <string name="keymap_double_volume_up">Double-press volume up</string>
+    <string name="keymap_double_volume_down">Double-press volume down</string>
+    <string name="keymap_needs_service">Requires the accessibility service to be enabled</string>
+
+    <string name="toast_filter_on">Grayscale on</string>
+    <string name="toast_filter_off">Grayscale off</string>
+    <string name="toast_no_permission">Lightson is missing the WRITE_SECURE_SETTINGS permission</string>
+
+    <string name="shortcut_toggle_short">Toggle filter</string>
+    <string name="shortcut_toggle_long">Toggle colour filter</string>
 </resources>

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
@@ -14,6 +15,23 @@ class MainActivity : AppCompatActivity() {
     private lateinit var filterSwitch: MaterialSwitch
     private lateinit var permissionCard: MaterialCardView
     private lateinit var serviceStatus: TextView
+    private lateinit var keymapValue: TextView
+
+    private val keymapModes = intArrayOf(
+        Prefs.KEYMAP_NONE,
+        Prefs.KEYMAP_CAMERA_LONG_PRESS,
+        Prefs.KEYMAP_VOLUME_CHORD,
+        Prefs.KEYMAP_DOUBLE_VOLUME_UP,
+        Prefs.KEYMAP_DOUBLE_VOLUME_DOWN,
+    )
+
+    private val keymapLabels = intArrayOf(
+        R.string.keymap_none,
+        R.string.keymap_camera_long_press,
+        R.string.keymap_volume_chord,
+        R.string.keymap_double_volume_up,
+        R.string.keymap_double_volume_down,
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         filterSwitch = findViewById(R.id.filter_switch)
         permissionCard = findViewById(R.id.permission_card)
         serviceStatus = findViewById(R.id.service_status)
+        keymapValue = findViewById(R.id.keymap_value)
 
         filterSwitch.setOnCheckedChangeListener { _, checked ->
             if (DaltonizerManager.isFilterEnabled(this) == checked) return@setOnCheckedChangeListener
@@ -37,9 +56,33 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, ColorAppsActivity::class.java))
         }
 
+        findViewById<View>(R.id.keymap_row).setOnClickListener { showKeymapDialog() }
+
         findViewById<View>(R.id.accessibility_row).setOnClickListener {
             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
         }
+    }
+
+    private fun showKeymapDialog() {
+        val prefs = Prefs(this)
+        val checked = keymapModes.indexOf(prefs.keymap).coerceAtLeast(0)
+        AlertDialog.Builder(this)
+            .setTitle(R.string.keymap_dialog_title)
+            .setSingleChoiceItems(keymapLabels.map { getString(it) }.toTypedArray(), checked) { dialog, which ->
+                prefs.keymap = keymapModes[which]
+                updateKeymapRow()
+                dialog.dismiss()
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    private fun updateKeymapRow() {
+        val index = keymapModes.indexOf(Prefs(this).keymap).coerceAtLeast(0)
+        val label = getString(keymapLabels[index])
+        keymapValue.text =
+            if (keymapModes[index] == Prefs.KEYMAP_NONE) label
+            else "$label — ${getString(R.string.keymap_needs_service)}"
     }
 
     override fun onResume() {
@@ -51,6 +94,7 @@ class MainActivity : AppCompatActivity() {
         serviceStatus.setText(
             if (isAccessibilityServiceEnabled()) R.string.service_on else R.string.service_off
         )
+        updateKeymapRow()
     }
 
     private fun isAccessibilityServiceEnabled(): Boolean {
