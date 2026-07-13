@@ -149,8 +149,10 @@ class ForegroundColorService : AccessibilityService() {
 
         val enable = !DaltonizerManager.isFilterEnabled(this)
         if (DaltonizerManager.setFilterEnabled(this, enable)) {
-            // A manual switch overrides any pending auto-restore.
-            if (!enable) Prefs(this).weDisabledFilter = false
+            // Turning colour on is temporary: marking weDisabledFilter makes
+            // the window watcher restore grayscale as soon as the user
+            // leaves the current app.
+            Prefs(this).weDisabledFilter = !enable
             Toast.makeText(
                 this,
                 if (enable) R.string.toast_filter_on else R.string.toast_filter_off,
@@ -169,6 +171,9 @@ class ForegroundColorService : AccessibilityService() {
      * filter mid-use.
      */
     private fun shouldIgnore(pkg: String): Boolean {
+        // Our own windows (main screen, toggle shortcut) must not count as
+        // "left the app" — that would instantly undo a manual colour toggle.
+        if (pkg == packageName) return true
         if (pkg == "com.android.systemui") return true
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         return imm.enabledInputMethodList.any { it.packageName == pkg }

@@ -7,24 +7,24 @@ Android device (8.0+).
 
 ## What it does
 
-- **Grayscale filter** — turns the whole screen black and white using
-  Android's built-in colour-correction (daltonizer), the same mechanism the
-  Light Phone uses. No overlays, no root.
-- **Colour apps** — pick apps that should always run in full colour. When
-  one of them comes to the foreground the grayscale filter switches off
+Your phone stays in grayscale (Android's built-in colour-correction /
+daltonizer — the same mechanism the Light Phone uses; no overlays, no
+root). Lightson only pauses the grayscale per app:
+
+- **Colour apps** — pick apps that should run in full colour. When one of
+  them comes to the foreground the grayscale filter switches off
   automatically, and it switches back on the moment you leave the app.
-- **Quick Settings tile** — flip the grayscale filter manually from the
-  notification shade.
-- **Keymap** — toggle the filter from hardware keys. Options: long-press the
-  camera button (Light Phone III's side shutter key), volume up + down
-  together, or double-press volume up/down. With the camera-button keymap a
-  short press still opens the camera, and the key is left untouched while a
-  camera app is in the foreground so the shutter keeps working.
+- **Keymap** — give the *current* app colour from a hardware key; grayscale
+  returns by itself when you leave the app (or press again). Options:
+  long-press the camera button (Light Phone III's side shutter key), volume
+  up + down together, or double-press volume up/down. With the camera-button
+  keymap a short press still opens the camera, and the key is left untouched
+  while a camera app is in the foreground so the shutter keeps working.
 - **Toggle shortcut** — an exported `ToggleFilterActivity`
   (`app.lightson.action.TOGGLE_FILTER`) plus a launcher long-press shortcut,
   so key-mapper apps (Key Mapper, Button Mapper), launcher gestures, or
-  `adb shell am start -n app.lightson/.ToggleFilterActivity` can toggle it
-  too.
+  `adb shell am start -n app.lightson/.ToggleFilterActivity` can toggle
+  colour for the current app too.
 
 ## Install with Obtainium
 
@@ -48,13 +48,12 @@ trust the signature as proof of origin, and never reuse the key elsewhere.
    adb shell pm grant app.lightson android.permission.WRITE_SECURE_SETTINGS
    ```
 
-3. Open Lightson and turn on the **Grayscale filter**.
-4. To use automatic colour switching, tap **Auto colour switching** and
+3. To use automatic colour switching, tap **Auto colour switching** and
    enable the *Lightson colour switching* accessibility service. The service
    only listens for foreground-app changes — it cannot and does not read
    screen content (`canRetrieveWindowContent` is off).
-5. Pick your **Colour apps** (e.g. Camera, Photos, Maps).
-6. Optionally pick a **Keymap** (e.g. *Long-press camera button*). Key
+4. Pick your **Colour apps** (e.g. Camera, Photos, Maps).
+5. Optionally pick a **Keymap** (e.g. *Long-press camera button*). Key
    gestures are detected by the same accessibility service, so it must be
    enabled for the keymap to work.
 

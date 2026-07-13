@@ -6,8 +6,7 @@
     <string name="permission_body">Lightson needs WRITE_SECURE_SETTINGS to control the colour filter. Connect your phone to a computer with adb and run:</string>
     <string name="permission_command">adb shell pm grant app.lightson android.permission.WRITE_SECURE_SETTINGS</string>
 
-    <string name="filter_switch_title">Grayscale filter</string>
-    <string name="filter_switch_subtitle">Show the whole screen in black and white</string>
+    <string name="app_explainer">Your phone stays in grayscale. Colour apps open in full colour and grayscale returns when you leave them. The keymap gives the current app colour until you leave it.</string>
 
     <string name="color_apps_title">Colour apps</string>
     <string name="color_apps_subtitle">Apps that always open in full colour</string>
@@ -19,10 +18,8 @@
     <string name="accessibility_service_label">Lightson colour switching</string>
     <string name="accessibility_service_description">Detects which app is in the foreground so the grayscale filter can be switched off for your chosen colour apps and restored afterwards. Lightson does not read any screen content.</string>
 
-    <string name="tile_label">Grayscale</string>
-
     <string name="keymap_row_title">Keymap</string>
-    <string name="keymap_dialog_title">Toggle filter with</string>
+    <string name="keymap_dialog_title">Toggle colour with</string>
     <string name="keymap_none">None</string>
     <string name="keymap_camera_long_press">Long-press camera button</string>
     <string name="keymap_volume_chord">Volume up + down together</string>
@@ -31,7 +28,7 @@
     <string name="keymap_needs_service">Requires the accessibility service to be enabled</string>
 
     <string name="toast_filter_on">Grayscale on</string>
-    <string name="toast_filter_off">Grayscale off</string>
+    <string name="toast_filter_off">Colour on until you leave this app</string>
     <string name="toast_no_permission">Lightson is missing the WRITE_SECURE_SETTINGS permission</string>
 
     <string name="shortcut_toggle_short">Toggle filter</string>

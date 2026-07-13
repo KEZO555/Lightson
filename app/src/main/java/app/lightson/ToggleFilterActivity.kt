@@ -6,8 +6,10 @@ import android.widget.Toast
 
 /**
  * Invisible activity that flips the grayscale filter and exits immediately.
- * Exported so launcher gestures, app shortcuts and third-party key-mapper
- * apps (Key Mapper, Button Mapper, ...) can bind a key to it:
+ * Turning colour on is temporary — grayscale is restored automatically when
+ * the app underneath is left. Exported so launcher gestures, app shortcuts
+ * and third-party key-mapper apps (Key Mapper, Button Mapper, ...) can bind
+ * a key to it:
  *
  *   adb shell am start -n app.lightson/.ToggleFilterActivity
  */
@@ -18,7 +20,7 @@ class ToggleFilterActivity : Activity() {
 
         val enable = !DaltonizerManager.isFilterEnabled(this)
         if (DaltonizerManager.setFilterEnabled(this, enable)) {
-            if (!enable) Prefs(this).weDisabledFilter = false
+            Prefs(this).weDisabledFilter = !enable
             Toast.makeText(
                 this,
                 if (enable) R.string.toast_filter_on else R.string.toast_filter_off,
