@@ -4,6 +4,7 @@ import android.accessibilityservice.AccessibilityService
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
@@ -67,6 +68,10 @@ class ForegroundColorService : AccessibilityService() {
     override fun onKeyEvent(event: KeyEvent): Boolean {
         val keymap = Prefs(this).keymap
         if (keymap == Prefs.KEYMAP_NONE) return false
+        // Keymaps only apply inside apps — on the home screen (LightOS) the
+        // keys keep their stock behaviour. Unknown foreground (e.g. right
+        // after the service restarts) counts as home to stay hands-off.
+        if (isHomeForeground()) return false
         val code = event.keyCode
 
         if (keymap == Prefs.KEYMAP_CAMERA_LONG_PRESS) {
@@ -129,6 +134,15 @@ class ForegroundColorService : AccessibilityService() {
             }
         }
         return true
+    }
+
+    private fun isHomeForeground(): Boolean {
+        val fg = foregroundPackage ?: return true
+        val home = packageManager.resolveActivity(
+            Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME),
+            PackageManager.MATCH_DEFAULT_ONLY
+        )?.activityInfo?.packageName
+        return fg == home
     }
 
     private fun launchCamera() {

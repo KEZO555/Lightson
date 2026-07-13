@@ -20,6 +20,8 @@ root). Lightson only pauses the grayscale per app:
   up + down together, or double-press volume up/down. With the camera-button
   keymap a short press still opens the camera, and the key is left untouched
   while a camera app is in the foreground so the shutter keeps working.
+  Keymaps only work inside apps — on the home screen (LightOS or whichever
+  launcher is set as default) all keys keep their stock behaviour.
 - **Toggle shortcut** — an exported `ToggleFilterActivity`
   (`app.lightson.action.TOGGLE_FILTER`) plus a launcher long-press shortcut,
   so key-mapper apps (Key Mapper, Button Mapper), launcher gestures, or
