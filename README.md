@@ -26,6 +26,18 @@ Android device (8.0+).
   `adb shell am start -n app.lightson/.ToggleFilterActivity` can toggle it
   too.
 
+## Install with Obtainium
+
+Add this repo to [Obtainium](https://github.com/ImranR98/Obtainium):
+*Add App* → paste `https://github.com/KEZO555/Lightson` → *Add*. Obtainium
+picks up the APK attached to the latest GitHub Release and notifies you of
+updates. Releases are published automatically whenever a `v*` tag is pushed.
+
+Note: release APKs are signed with a keystore committed to this repo so
+every CI build has the same signature (required for clean updates). That
+key is for personal sideloading only — anyone can sign with it, so don't
+trust the signature as proof of origin, and never reuse the key elsewhere.
+
 ## Setup
 
 1. Install the APK.
