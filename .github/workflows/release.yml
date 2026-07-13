@@ -4,6 +4,11 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version tag to release, e.g. v1.0.0"
+        required: true
 
 permissions:
   contents: write
@@ -11,6 +16,8 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ inputs.version || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
 
@@ -25,10 +32,11 @@ jobs:
         run: ./gradlew assembleRelease
 
       - name: Rename APK
-        run: cp app/build/outputs/apk/release/app-release.apk lightson-${{ github.ref_name }}.apk
+        run: cp app/build/outputs/apk/release/app-release.apk "lightson-$VERSION.apk"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ env.VERSION }}
           files: lightson-*.apk
           generate_release_notes: true
