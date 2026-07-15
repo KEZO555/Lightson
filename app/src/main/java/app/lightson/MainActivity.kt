@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.materialswitch.MaterialSwitch
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,6 +39,12 @@ class MainActivity : AppCompatActivity() {
         permissionCard = findViewById(R.id.permission_card)
         serviceStatus = findViewById(R.id.service_status)
         keymapValue = findViewById(R.id.keymap_value)
+
+        val closeOnLock = findViewById<MaterialSwitch>(R.id.close_on_lock_switch)
+        closeOnLock.isChecked = Prefs(this).closeAppsOnLock
+        closeOnLock.setOnCheckedChangeListener { _, checked ->
+            Prefs(this).closeAppsOnLock = checked
+        }
 
         findViewById<View>(R.id.color_apps_row).setOnClickListener {
             startActivity(Intent(this, ColorAppsActivity::class.java))

@@ -18,6 +18,9 @@
     <string name="accessibility_service_label">Lightson colour switching</string>
     <string name="accessibility_service_description">Detects which app is in the foreground so the grayscale filter can be switched off for your chosen colour apps and restored afterwards. Lightson does not read any screen content.</string>
 
+    <string name="close_on_lock_title">Close apps on lock</string>
+    <string name="close_on_lock_subtitle">When the screen locks, close the apps used since the last lock</string>
+
     <string name="keymap_row_title">Keymap</string>
     <string name="keymap_dialog_title">Toggle colour with</string>
     <string name="keymap_none">None</string>

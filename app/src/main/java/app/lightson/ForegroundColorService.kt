@@ -1,9 +1,12 @@
 package app.lightson
 
 import android.accessibilityservice.AccessibilityService
+import android.app.ActivityManager
 import android.content.ActivityNotFoundException
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Handler
 import android.os.Looper
@@ -45,11 +48,31 @@ class ForegroundColorService : AccessibilityService() {
             .toSet()
     }
 
+    /** Apps the user has opened since the last lock, killed on screen off. */
+    private val sessionApps = mutableSetOf<String>()
+
+    private val screenOffReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (intent.action == Intent.ACTION_SCREEN_OFF) onScreenLocked()
+        }
+    }
+
+    override fun onServiceConnected() {
+        super.onServiceConnected()
+        registerReceiver(screenOffReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
+    }
+
+    override fun onDestroy() {
+        runCatching { unregisterReceiver(screenOffReceiver) }
+        super.onDestroy()
+    }
+
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         if (event.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) return
         val pkg = event.packageName?.toString() ?: return
         if (shouldIgnore(pkg)) return
         foregroundPackage = pkg
+        if (!isHomePackage(pkg)) sessionApps.add(pkg)
 
         val prefs = Prefs(this)
         if (pkg in prefs.colorApps) {
@@ -138,11 +161,37 @@ class ForegroundColorService : AccessibilityService() {
 
     private fun isHomeForeground(): Boolean {
         val fg = foregroundPackage ?: return true
+        return isHomePackage(fg)
+    }
+
+    private fun isHomePackage(pkg: String): Boolean {
         val home = packageManager.resolveActivity(
             Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME),
             PackageManager.MATCH_DEFAULT_ONLY
         )?.activityInfo?.packageName
-        return fg == home
+        return pkg == home
+    }
+
+    /**
+     * The screen locked: restore grayscale right away, and (when enabled)
+     * close every app used since the previous lock. killBackgroundProcesses
+     * needs the app to actually be in the background, so the kill runs after
+     * a short delay to let the foreground app settle.
+     */
+    private fun onScreenLocked() {
+        val prefs = Prefs(this)
+        if (prefs.weDisabledFilter && DaltonizerManager.setFilterEnabled(this, true)) {
+            prefs.weDisabledFilter = false
+        }
+
+        if (!prefs.closeAppsOnLock) return
+        val toKill = sessionApps.toList()
+        sessionApps.clear()
+        if (toKill.isEmpty()) return
+        handler.postDelayed({
+            val am = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            toKill.forEach { pkg -> runCatching { am.killBackgroundProcesses(pkg) } }
+        }, KILL_DELAY_MS)
     }
 
     private fun launchCamera() {
@@ -197,5 +246,6 @@ class ForegroundColorService : AccessibilityService() {
         private const val DOUBLE_PRESS_WINDOW_MS = 400L
         private const val TOGGLE_DEBOUNCE_MS = 500L
         private const val LONG_PRESS_MS = 500L
+        private const val KILL_DELAY_MS = 3000L
     }
 }

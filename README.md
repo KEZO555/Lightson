@@ -22,6 +22,12 @@ root). Lightson only pauses the grayscale per app:
   while a camera app is in the foreground so the shutter keeps working.
   Keymaps only work inside apps — on the home screen (LightOS or whichever
   launcher is set as default) all keys keep their stock behaviour.
+- **Close apps on lock** (optional) — when the screen locks, Lightson kills
+  the background processes of every app you used since the last lock, so
+  apps don't linger running and start fresh next time. Locking also restores
+  grayscale immediately if a colour toggle was active. Note: without root an
+  app cannot force-stop others or clear the system Recents list — apps with
+  active foreground services (e.g. music playback) survive, by design.
 - **Toggle shortcut** — an exported `ToggleFilterActivity`
   (`app.lightson.action.TOGGLE_FILTER`) plus a launcher long-press shortcut,
   so key-mapper apps (Key Mapper, Button Mapper), launcher gestures, or

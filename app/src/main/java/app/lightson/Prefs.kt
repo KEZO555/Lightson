@@ -27,6 +27,11 @@ class Prefs(context: Context) {
         get() = prefs.getInt(KEY_KEYMAP, KEYMAP_NONE)
         set(value) = prefs.edit().putInt(KEY_KEYMAP, value).apply()
 
+    /** Kill the apps used since the last lock whenever the screen locks. */
+    var closeAppsOnLock: Boolean
+        get() = prefs.getBoolean(KEY_CLOSE_ON_LOCK, false)
+        set(value) = prefs.edit().putBoolean(KEY_CLOSE_ON_LOCK, value).apply()
+
     fun addColorApp(packageName: String) {
         colorApps = colorApps + packageName
     }
@@ -39,6 +44,7 @@ class Prefs(context: Context) {
         private const val KEY_COLOR_APPS = "color_apps"
         private const val KEY_WE_DISABLED = "we_disabled_filter"
         private const val KEY_KEYMAP = "keymap"
+        private const val KEY_CLOSE_ON_LOCK = "close_apps_on_lock"
 
         const val KEYMAP_NONE = 0
         const val KEYMAP_VOLUME_CHORD = 1
